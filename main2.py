@@ -4,8 +4,13 @@ print("TensorFlow version:", tf.__version__)
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras import Model
 
+<<<<<<< HEAD
 mnist = tf.keras.datasets.mnist
 
+=======
+# Load MNIST dataset
+mnist = tf.keras.datasets.mnist
+>>>>>>> master
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
@@ -13,12 +18,22 @@ x_train, x_test = x_train / 255.0, x_test / 255.0
 x_train = x_train[..., tf.newaxis].astype("float32")
 x_test = x_test[..., tf.newaxis].astype("float32")
 
+<<<<<<< HEAD
 train_ds = tf.data.Dataset.from_tensor_slices(
     (x_train, y_train)).shuffle(10000).batch(32)
 
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
 
 class MyModel(Model):
+=======
+# Use tf.data to batch and shuffle the MNIST dataset
+train_ds = tf.data.Dataset.from_tensor_slices(
+    (x_train, y_train)).shuffle(10000).batch(32)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
+
+# Build keras model using subclass
+class KerasModel(Model):
+>>>>>>> master
   def __init__(self):
     super(MyModel, self).__init__()
     self.conv1 = Conv2D(32, 3, activation='relu')
@@ -33,18 +48,32 @@ class MyModel(Model):
     return self.d2(x)
 
 # Create an instance of the model
+<<<<<<< HEAD
 model = MyModel()
 
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 optimizer = tf.keras.optimizers.Adam()
 
+=======
+model = KerasModel()
+
+# Choose an optimizer and loss function for training
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+optimizer = tf.keras.optimizers.Adam()
+
+# Select metrics to measure the loss and the accuracy of the model
+>>>>>>> master
 train_loss = tf.keras.metrics.Mean(name='train_loss')
 train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='train_accuracy')
 
 test_loss = tf.keras.metrics.Mean(name='test_loss')
 test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
 
+<<<<<<< HEAD
+=======
+# Use tf.GradientTape to train the model
+>>>>>>> master
 @tf.function
 def train_step(images, labels):
   with tf.GradientTape() as tape:
@@ -58,6 +87,10 @@ def train_step(images, labels):
   train_loss(loss)
   train_accuracy(labels, predictions)
 
+<<<<<<< HEAD
+=======
+# Test the model
+>>>>>>> master
 @tf.function
 def test_step(images, labels):
   # training=False is only needed if there are layers with different
@@ -68,6 +101,10 @@ def test_step(images, labels):
   test_loss(t_loss)
   test_accuracy(labels, predictions)
 
+<<<<<<< HEAD
+=======
+# Run the model with 5 epochs
+>>>>>>> master
 EPOCHS = 5
 
 for epoch in range(EPOCHS):
