@@ -4,6 +4,8 @@ print("TensorFlow version:", tf.__version__)
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras import Model
 
+mnist = tf.keras.datasets.mnist
+
 # Load MNIST dataset
 mnist = tf.keras.datasets.mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -13,6 +15,12 @@ x_train, x_test = x_train / 255.0, x_test / 255.0
 x_train = x_train[..., tf.newaxis].astype("float32")
 x_test = x_test[..., tf.newaxis].astype("float32")
 
+train_ds = tf.data.Dataset.from_tensor_slices(
+    (x_train, y_train)).shuffle(10000).batch(32)
+
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
+
+class MyModel(Model):
 # Use tf.data to batch and shuffle the MNIST dataset
 train_ds = tf.data.Dataset.from_tensor_slices(
     (x_train, y_train)).shuffle(10000).batch(32)
@@ -34,6 +42,12 @@ class KerasModel(Model):
     return self.d2(x)
 
 # Create an instance of the model
+model = MyModel()
+
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+
+optimizer = tf.keras.optimizers.Adam()
+
 model = KerasModel()
 
 # Choose an optimizer and loss function for training
