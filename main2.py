@@ -76,7 +76,6 @@ def train_step(images, labels):
   train_accuracy(labels, predictions)
 
 # Test the model
->>>>>>> master
 @tf.function
 def test_step(images, labels):
   # training=False is only needed if there are layers with different
